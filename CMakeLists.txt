@@ -17,9 +17,14 @@ endif()
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-set(CMAKE_THREAD_PREFER_PTHREAD ON)
-find_package(Threads)
-find_package(PNG)
+option(CMAKE_THREAD_PREFER_PTHREAD "Prefer pthread" ON) ######
+
+if (CMAKE_THREAD_PREFER_PTHREAD) ######
+    find_package(Threads) ######
+endif() ######
+if (NOT WITHOUT_PNG) ######
+    find_package(PNG)
+endif() ######
 find_package(Iconv)
 
 if(CMAKE_USE_PTHREADS_INIT)
@@ -42,7 +47,8 @@ check_include_file(string.h   HAVE_STRING_H  )
 check_include_file(getopt.h   HAVE_GETOPT_H  )
 check_include_file(sys/time.h HAVE_SYS_TIME_H)
 check_include_file(time.h     HAVE_TIME_H    )
-check_include_file(pthread.h  HAVE_PTHREAD_H )
+#check_include_file(pthread.h  HAVE_PTHREAD_H ) ######
+set(HAVE_PTHREAD_H OFF) ######
 
 check_function_exists(strdup HAVE_STRDUP)
 
@@ -199,3 +205,4 @@ message(STATUS " .. Build utility tools  ........ = ${WITH_TOOLS}"            )
 message(STATUS " .. Disable PNG support  ........ = ${WITHOUT_PNG}"           )
 message(STATUS " .. Installation prefix ......... = ${CMAKE_INSTALL_PREFIX}"  )
 message(STATUS "------------------------------------------------------------ ")
+
